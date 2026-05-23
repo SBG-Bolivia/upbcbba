@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
+import TiltCard from "./TiltCard";
+import TiltCardGSAP from "./TiltCardGSAP";
 
 const EVENTS = [
   {
@@ -131,66 +133,69 @@ export default function Events() {
           </div>
         </div>
 
-        {/* Featured event */}
-        <div
-          ref={featuredRef}
-          className="relative rounded-2xl overflow-hidden mb-6 border border-white/[0.08]"
-          style={{ background: "#01051f" }}
-        >
-          {/* Grid bg */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              backgroundImage:
-                "linear-gradient(to right, rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,.03) 1px, transparent 1px)",
-              backgroundSize: "32px 32px",
-            }}
-          />
-          {/* Glow */}
-          <div
-            className="absolute top-0 right-0 w-96 h-48 pointer-events-none"
-            style={{
-              background:
-                "radial-gradient(ellipse at top right, rgba(92,242,200,0.12), transparent 70%)",
-            }}
-          />
+        {/* Featured event — outer div holds GSAP ref, inner TiltCard handles 3D */}
+        <div ref={featuredRef} className="mb-6">
+          <TiltCard
+            intensity={4}
+            shineColor="rgba(92,242,200,0.07)"
+            className="relative rounded-2xl overflow-hidden border border-white/[0.08]"
+            style={{ background: "#01051f" }}
+          >
+            {/* Grid bg */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,.03) 1px, transparent 1px)",
+                backgroundSize: "32px 32px",
+              }}
+            />
+            {/* Glow */}
+            <div
+              className="absolute top-0 right-0 w-96 h-48 pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(ellipse at top right, rgba(92,242,200,0.12), transparent 70%)",
+              }}
+            />
 
-          <div className="relative p-8 md:p-10">
-            <div className="flex justify-between items-start mb-8">
-              <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-signal-500">
-                {featured.tag} · {featured.date}
-              </span>
-              <span className="font-mono text-[11px] text-white/30 uppercase tracking-[0.1em]">
-                cocha · 1840 m.s.n.m.
-              </span>
+            <div className="relative p-8 md:p-10">
+              <div className="flex justify-between items-start mb-8">
+                <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-signal-500">
+                  {featured.tag} · {featured.date}
+                </span>
+                <span className="font-mono text-[11px] text-white/30 uppercase tracking-[0.1em]">
+                  cocha · 1840 m.s.n.m.
+                </span>
+              </div>
+              <h3
+                className="text-[clamp(24px,3.5vw,38px)] font-semibold text-white leading-[1.05] max-w-2xl mb-10"
+                style={{ letterSpacing: "-0.025em" }}
+              >
+                {featured.title} — once proyectos, dos horas, una sala.
+              </h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 border-t border-white/[0.1] pt-6">
+                {[
+                  { label: "Miembros",  value: "148",       sub: "activos" },
+                  { label: "Proyectos", value: "11",        sub: "esta noche" },
+                  { label: "Ubicación", value: "Bloque C",  sub: featured.location.split("·")[0].trim() },
+                  { label: "Hora",      value: featured.time, sub: featured.date },
+                ].map((s) => (
+                  <div key={s.label}>
+                    <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/40 mb-1.5">
+                      {s.label}
+                    </dt>
+                    <dd className="text-[26px] font-semibold text-white leading-none m-0" style={{ letterSpacing: "-0.02em" }}>
+                      {s.value}
+                      <em className="not-italic font-mono text-[12px] font-normal text-white/40 ml-1.5">
+                        {s.sub}
+                      </em>
+                    </dd>
+                  </div>
+                ))}
+              </div>
             </div>
-            <h3
-              className="text-[clamp(24px,3.5vw,38px)] font-semibold text-white leading-[1.05] max-w-2xl mb-10"
-              style={{ letterSpacing: "-0.025em" }}
-            >
-              {featured.title} — once proyectos, dos horas, una sala.
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 border-t border-white/[0.1] pt-6">
-              {[
-                { label: "Miembros", value: "148", sub: "activos" },
-                { label: "Proyectos", value: "11", sub: "esta noche" },
-                { label: "Ubicación", value: "Bloque C", sub: featured.location.split("·")[0].trim() },
-                { label: "Hora", value: featured.time, sub: featured.date },
-              ].map((s) => (
-                <div key={s.label}>
-                  <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/40 mb-1.5">
-                    {s.label}
-                  </dt>
-                  <dd className="text-[26px] font-semibold text-white leading-none m-0" style={{ letterSpacing: "-0.02em" }}>
-                    {s.value}
-                    <em className="not-italic font-mono text-[12px] font-normal text-white/40 ml-1.5">
-                      {s.sub}
-                    </em>
-                  </dd>
-                </div>
-              ))}
-            </div>
-          </div>
+          </TiltCard>
         </div>
 
         {/* Event cards grid */}
@@ -201,8 +206,10 @@ export default function Events() {
           {rest.map((ev) => {
             const c = colorMap[ev.color];
             return (
-              <div
+              <TiltCardGSAP
                 key={ev.title}
+                intensity={10}
+                shineColor="rgba(92,242,200,0.12)"
                 className={`rounded-xl border bg-white/[0.03] hover:bg-white/[0.06] transition-colors p-5 flex flex-col gap-3 ${c.border}`}
               >
                 <div className="flex items-center justify-between">
@@ -225,7 +232,7 @@ export default function Events() {
                   <span>{ev.location}</span>
                   <span>{ev.time}</span>
                 </div>
-              </div>
+              </TiltCardGSAP>
             );
           })}
         </div>

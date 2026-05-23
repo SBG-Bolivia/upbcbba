@@ -115,6 +115,12 @@
   --ring: #5cf2c8;
 }
 
+/* Custom cursor */
+.cursor-none,
+.cursor-none * {
+  cursor: none !important;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

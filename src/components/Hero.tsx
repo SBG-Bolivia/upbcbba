@@ -61,7 +61,7 @@ export default function Hero() {
           0.2
         );
 
-      // Subtle parallax on the grid bg
+      // Subtle parallax on the grid bg (scroll)
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top top",
@@ -74,7 +74,21 @@ export default function Hero() {
       });
     }, sectionRef);
 
-    return () => ctx.revert();
+    // Mouse parallax (outside gsap.context so we can clean up the listener)
+    const onMouseMove = (e: MouseEvent) => {
+      const xPct = (e.clientX / window.innerWidth  - 0.5) * 2;
+      const yPct = (e.clientY / window.innerHeight - 0.5) * 2;
+      gsap.to(logoRef.current,  { x: xPct * 14, y: yPct * 9,  duration: 1.2, ease: "power2.out", overwrite: "auto" });
+      gsap.to(metaRef.current,  { x: xPct * 6,  y: yPct * 4,  duration: 1.4, ease: "power2.out", overwrite: "auto" });
+      const gridBgEl = sectionRef.current?.querySelector(".grid-bg");
+      if (gridBgEl) gsap.to(gridBgEl, { x: xPct * -18, y: yPct * -12, duration: 1.8, ease: "power2.out", overwrite: "auto" });
+    };
+    window.addEventListener("mousemove", onMouseMove);
+
+    return () => {
+      ctx.revert();
+      window.removeEventListener("mousemove", onMouseMove);
+    };
   }, []);
 
   return (

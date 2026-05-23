@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
+import TiltCardGSAP from "./TiltCardGSAP";
 
 const PROJECTS = [
   {
@@ -120,8 +121,10 @@ export default function Projects() {
           {PROJECTS.map((p) => {
             const s = statusMap[p.status];
             return (
-              <article
+              <TiltCardGSAP
                 key={p.title}
+                intensity={11}
+                shineColor="rgba(26,58,173,0.13)"
                 className="flex flex-col gap-4 p-5 rounded-xl border border-ink-100 dark:border-ink-800/50 bg-gradient-to-b from-white to-ink-050/50 dark:from-ink-900/70 dark:to-ink-900/40 hover:border-navy-200 dark:hover:border-navy-700/50 transition-colors"
               >
                 <div className="flex items-center justify-between">
@@ -159,7 +162,7 @@ export default function Projects() {
                     {p.users} usuarios
                   </span>
                 </div>
-              </article>
+              </TiltCardGSAP>
             );
           })}
         </div>

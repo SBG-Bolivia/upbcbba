@@ -11,15 +11,34 @@ const navLinks = [
   { label: "Proyectos", href: "#proyectos" },
 ];
 
+const SECTION_IDS = ["nosotros", "miembros", "eventos", "proyectos"];
+
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled,       setScrolled]       = useState(false);
+  const [menuOpen,       setMenuOpen]        = useState(false);
+  const [activeSection,  setActiveSection]   = useState("");
   const navRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActiveSection(entry.target.id);
+        });
+      },
+      { rootMargin: "-35% 0px -60% 0px" }
+    );
+    SECTION_IDS.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
   }, []);
 
   // At the top the hero is always dark — force white text.
@@ -64,15 +83,21 @@ export default function Navbar() {
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-7">
-          {navLinks.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              className={`font-mono text-[11px] uppercase tracking-[0.08em] transition-colors duration-300 ${link}`}
-            >
-              {l.label}
-            </a>
-          ))}
+          {navLinks.map((l) => {
+            const isActive = activeSection === l.href.slice(1);
+            return (
+              <a
+                key={l.href}
+                href={l.href}
+                className={`relative font-mono text-[11px] uppercase tracking-[0.08em] transition-colors duration-300 ${link}`}
+              >
+                {l.label}
+                {isActive && (
+                  <span className="absolute -bottom-1 left-0 right-0 h-px bg-signal-500 rounded-full" />
+                )}
+              </a>
+            );
+          })}
         </nav>
 
         {/* Actions */}
