@@ -1,0 +1,85 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "WhoAmI",
+      "Effect": "Allow",
+      "Action": ["sts:GetCallerIdentity"],
+      "Resource": "*"
+    },
+    {
+      "Sid": "DynamoAdminAndData",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:CreateTable",
+        "dynamodb:DescribeTable",
+        "dynamodb:UpdateTable",
+        "dynamodb:DeleteTable",
+        "dynamodb:TagResource",
+        "dynamodb:UntagResource",
+        "dynamodb:ListTagsOfResource",
+        "dynamodb:GetItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:BatchGetItem"
+      ],
+      "Resource": [
+        "arn:aws:dynamodb:*:*:table/sbg-cert-*",
+        "arn:aws:dynamodb:*:*:table/sbg-cert-*/index/*"
+      ]
+    },
+    {
+      "Sid": "DynamoList",
+      "Effect": "Allow",
+      "Action": ["dynamodb:ListTables"],
+      "Resource": "*"
+    },
+    {
+      "Sid": "S3Bucket",
+      "Effect": "Allow",
+      "Action": [
+        "s3:CreateBucket",
+        "s3:ListBucket",
+        "s3:GetBucketLocation",
+        "s3:PutBucketPublicAccessBlock",
+        "s3:GetBucketPublicAccessBlock",
+        "s3:PutBucketPolicy",
+        "s3:PutEncryptionConfiguration",
+        "s3:PutBucketCORS"
+      ],
+      "Resource": "arn:aws:s3:::sbg-cert-*"
+    },
+    {
+      "Sid": "S3Objects",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": "arn:aws:s3:::sbg-cert-*/*"
+    },
+    {
+      "Sid": "S3ListAll",
+      "Effect": "Allow",
+      "Action": ["s3:ListAllMyBuckets"],
+      "Resource": "*"
+    },
+    {
+      "Sid": "SESIdentityAndSend",
+      "Effect": "Allow",
+      "Action": [
+        "ses:CreateEmailIdentity",
+        "ses:GetEmailIdentity",
+        "ses:ListEmailIdentities",
+        "ses:GetAccount",
+        "ses:SendEmail"
+      ],
+      "Resource": "*"
+    }
+  ]
+}

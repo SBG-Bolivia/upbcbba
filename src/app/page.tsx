@@ -6,11 +6,15 @@ import Perks         from "@/components/Perks";
 import Timeline      from "@/components/Timeline";
 import Testimonials  from "@/components/Testimonials";
 import Events        from "@/components/Events";
+import PastEvents    from "@/components/PastEvents";
 import Members       from "@/components/Members";
+import Team          from "@/components/Team";
+import OpenRoles     from "@/components/OpenRoles";
 import Projects      from "@/components/Projects";
 import JoinForm      from "@/components/JoinForm";
 import FAQ           from "@/components/FAQ";
 import Partners      from "@/components/Partners";
+import Contact       from "@/components/Contact";
 import Footer        from "@/components/Footer";
 import SmoothScroll  from "@/components/SmoothScroll";
 import ScrollProgress from "@/components/ScrollProgress";
@@ -37,11 +41,15 @@ export default function Home() {
           <Timeline />
           <Testimonials />
           <Events />
+          <PastEvents />
           <Members />
+          <Team />
+          <OpenRoles />
           <Projects />
           <JoinForm />
           <FAQ />
           <Partners />
+          <Contact />
         </main>
         <Footer />
       </SmoothScroll>

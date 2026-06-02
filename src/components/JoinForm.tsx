@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/gsap";
 
+const WHATSAPP_URL = "https://chat.whatsapp.com/E3JGbxrbDYaICTwRpIN1Jz";
+
 const CARRERAS = [
   "Ing. de Sistemas",
   "Ing. Civil",
@@ -46,6 +48,9 @@ export default function JoinForm() {
     setState("submitting");
     await new Promise((r) => setTimeout(r, 900));
     setState("success");
+    // Convenience: open the WhatsApp group shortly after success.
+    // The button in the success state is the reliable path.
+    setTimeout(() => window.open(WHATSAPP_URL, "_blank", "noopener,noreferrer"), 1200);
   };
 
   const set = (k: keyof typeof form) => (
@@ -102,9 +107,17 @@ export default function JoinForm() {
                 </div>
                 <h3 className="text-white font-semibold text-lg">¡Listo!</h3>
                 <p className="text-white/55 text-sm max-w-xs">
-                  Te mandamos la info del próximo evento a tu correo. Nos vemos
-                  en el Demo Night.
+                  Te mandamos la info del próximo evento a tu correo. Último
+                  paso: entrá al grupo de WhatsApp para no perderte nada.
                 </p>
+                <a
+                  href={WHATSAPP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium text-sm bg-signal-500 text-ink-950 hover:bg-signal-600 transition-colors"
+                >
+                  Entrar al grupo de WhatsApp →
+                </a>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col gap-5">

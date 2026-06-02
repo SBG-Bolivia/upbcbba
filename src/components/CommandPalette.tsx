@@ -15,9 +15,13 @@ import {
 
 const NAV_ITEMS = [
   { label: "Nosotros",  href: "#nosotros",  hint: "Quiénes somos" },
-  { label: "Miembros",  href: "#miembros",  hint: "Quiénes están construyendo" },
   { label: "Eventos",   href: "#eventos",   hint: "Próximas sesiones" },
+  { label: "Galería",   href: "#pasados",   hint: "Eventos pasados" },
+  { label: "Miembros",  href: "#miembros",  hint: "Quiénes están construyendo" },
+  { label: "Equipo",    href: "#equipo",    hint: "Quiénes lideran el grupo" },
+  { label: "Roles",     href: "#roles",     hint: "Posiciones abiertas" },
   { label: "Proyectos", href: "#proyectos", hint: "Lo que ya se está enviando" },
+  { label: "Contacto",  href: "#contacto",  hint: "Hablemos" },
   { label: "Únete",     href: "#unete",     hint: "Formulario de registro" },
 ];
 

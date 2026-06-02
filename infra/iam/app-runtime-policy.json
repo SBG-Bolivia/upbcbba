@@ -1,0 +1,35 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "CertDataAccess",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:Query",
+        "dynamodb:BatchWriteItem"
+      ],
+      "Resource": [
+        "arn:aws:dynamodb:*:*:table/sbg-cert-*",
+        "arn:aws:dynamodb:*:*:table/sbg-cert-*/index/*"
+      ]
+    },
+    {
+      "Sid": "CertPdfStorage",
+      "Effect": "Allow",
+      "Action": ["s3:GetObject", "s3:PutObject"],
+      "Resource": [
+        "arn:aws:s3:::sbg-cert-*/templates/*",
+        "arn:aws:s3:::sbg-cert-*/certs/*"
+      ]
+    },
+    {
+      "Sid": "SendCertificateEmail",
+      "Effect": "Allow",
+      "Action": ["ses:SendEmail"],
+      "Resource": "*"
+    }
+  ]
+}

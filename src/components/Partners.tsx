@@ -30,8 +30,21 @@ export default function Partners() {
   }, []);
 
   return (
-    <div className="py-14 border-b border-ink-100 dark:border-ink-800/40 bg-paper dark:bg-ink-950">
+    <div id="sponsors" className="py-16 border-b border-ink-100 dark:border-ink-800/40 bg-paper dark:bg-ink-950">
       <div className="max-w-[1240px] mx-auto px-6 md:px-8">
+        {/* Backed by AWS lead band */}
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-signal-600/10 border border-signal-600/20 font-mono text-[10px] uppercase tracking-[0.14em] text-signal-700 dark:text-signal-500 mb-4">
+            <span className="w-[6px] h-[6px] rounded-full bg-signal-600" />
+            Respaldado por AWS
+          </span>
+          <p className="text-[18px] md:text-[20px] text-ink-700 dark:text-ink-200 leading-relaxed" style={{ letterSpacing: "-0.01em" }}>
+            Somos un grupo oficial del programa AWS Student Builders — conectados
+            a una comunidad global de builders, con el respaldo y los recursos de
+            Amazon Web Services.
+          </p>
+        </div>
+
         <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-ink-400 dark:text-ink-600 text-center mb-8">
           Partners &amp; comunidad
         </p>

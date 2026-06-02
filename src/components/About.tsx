@@ -24,7 +24,6 @@ const PILLARS = [
 const STATS = [
   { value: 148, label: "Miembros activos", suffix: "" },
   { value: 23, label: "Proyectos enviados", suffix: "'25–'26" },
-  { value: 9, label: "Carreras", suffix: "" },
 ];
 
 function AnimatedNumber({
@@ -156,10 +155,12 @@ export default function About() {
               Hacemos cosas reales. Juntos.
             </h2>
             <p className="text-[16px] text-ink-500 dark:text-ink-400 leading-relaxed max-w-xl">
-              Somos el grupo oficial de AWS en la UPB Cochabamba. Cualquiera que
-              quiera construir algo — diseñadores, devs, analistas, o estudiantes
-              de filosofía — tiene un lugar aquí. La membresía es gratis. El
-              trabajo, no.
+              Somos el AWS Student Builder Group oficial de la UPB Cochabamba —
+              parte de una comunidad global de builders respaldada por AWS.
+              Diseñadores, devs, analistas o estudiantes de filosofía: si querés
+              construir algo, tenés un lugar acá. Aprendemos con tecnología de
+              nube de clase mundial y pensamos en grande — proyectos que nacen en
+              Cochabamba y escalan al mundo. La membresía es gratis. El trabajo, no.
             </p>
           </div>
         </div>

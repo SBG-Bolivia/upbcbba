@@ -6,22 +6,22 @@ import ScrambleText from "./ScrambleText";
 
 const MILESTONES = [
   {
-    date: "MAR 2024",
+    date: "NOV 2025",
     title: "Fundación",
-    desc: "El grupo se funda con 8 miembros y una idea: construir cosas juntos en la UPB. Primera reunión en el Lab de Sistemas.",
+    desc: "El grupo se funda con 5 miembros y una idea: construir cosas juntos en la UPB. Primera reunión en el Lab de Sistemas.",
     tag: "Inicio",
     color: "navy",
   },
   {
-    date: "JUN 2024",
-    title: "Primera Demo Night",
+    date: "MAR 2025",
+    title: "Primer Kick Off",
     desc: "Cuatro proyectos, una sala de clases, y más gente de la esperada. El formato funcionó desde el primer intento.",
     tag: "Comunidad",
     color: "signal",
   },
   {
     date: "SEP 2024",
-    title: "Primer BuildWeekend",
+    title: "Cloud RoadMap",
     desc: "24 horas, tres equipos, dos proyectos que terminaron en producción con usuarios reales.",
     tag: "Hackathon",
     color: "plaza",

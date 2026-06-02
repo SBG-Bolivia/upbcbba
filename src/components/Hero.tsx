@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 
-const HEADLINE_WORDS = ["Construye", "el", "próximo", "Cochabamba,", "en", "código."];
+const HEADLINE_WORDS = ["Construyendo", "el", "futuro", "tech", "de", "Cochabamba"];
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -136,7 +136,7 @@ export default function Hero() {
                 ref={(el) => { wordsRef.current[i] = el; }}
                 className="inline-block mr-[0.22em] last:mr-0"
               >
-                {word === "Cochabamba," ? (
+                {word === "Cochabamba" ? (
                   <em
                     className="not-italic"
                     style={{
@@ -167,7 +167,7 @@ export default function Hero() {
 
           <div ref={ctasRef} className="flex flex-wrap gap-3">
             <a
-              href="#nosotros"
+              href="#unete"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium bg-white text-navy-700 hover:bg-white/90 transition-colors shadow-lg"
             >
               Únete al grupo

@@ -6,12 +6,13 @@ import ThemeToggle from "./ThemeToggle";
 
 const navLinks = [
   { label: "Nosotros",  href: "#nosotros" },
-  { label: "Miembros",  href: "#miembros" },
   { label: "Eventos",   href: "#eventos" },
+  { label: "Galería",   href: "#pasados" },
+  { label: "Equipo",    href: "#equipo" },
   { label: "Proyectos", href: "#proyectos" },
 ];
 
-const SECTION_IDS = ["nosotros", "miembros", "eventos", "proyectos"];
+const SECTION_IDS = ["nosotros", "eventos", "pasados", "equipo", "proyectos"];
 
 export default function Navbar() {
   const [scrolled,       setScrolled]       = useState(false);

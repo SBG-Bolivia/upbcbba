@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Lenis from "lenis";
-import { gsap } from "@/lib/gsap";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null);
@@ -16,11 +16,20 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
 
     lenisRef.current = lenis;
 
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000);
-    });
+    // Keep ScrollTrigger in sync with Lenis' scroll position. Without this,
+    // every scroll-reveal trigger evaluates against a stale position and they
+    // all fire at once, and the smooth scroll can stall partway down the page.
+    lenis.on("scroll", ScrollTrigger.update);
 
+    // Drive Lenis from GSAP's ticker. Keep a named reference so we can remove
+    // exactly this callback on cleanup (an inline arrow would never match).
+    const raf = (time: number) => lenis.raf(time * 1000);
+    gsap.ticker.add(raf);
     gsap.ticker.lagSmoothing(0);
+
+    // Trigger positions depend on the final layout (fonts/images), so recompute
+    // once everything has settled.
+    const refreshId = window.setTimeout(() => ScrollTrigger.refresh(), 300);
 
     const handleAnchorClick = (e: MouseEvent) => {
       const target = e.target as HTMLAnchorElement;
@@ -36,7 +45,9 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     document.addEventListener("click", handleAnchorClick);
 
     return () => {
-      gsap.ticker.remove((time) => lenis.raf(time * 1000));
+      window.clearTimeout(refreshId);
+      lenis.off("scroll", ScrollTrigger.update);
+      gsap.ticker.remove(raf);
       document.removeEventListener("click", handleAnchorClick);
       lenis.destroy();
     };

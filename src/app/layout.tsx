@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "AWS Student Builder Group — UPB Cochabamba",
     description:
-      "Construye el próximo Cochabamba, en código. Membresía gratis para estudiantes UPB.",
+      "Construyendo el futuro tech de Cochabamba. Membresía gratis para estudiantes UPB.",
     url: BASE_URL,
     siteName: "AWS UPB Builders",
     locale: "es_BO",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "AWS Student Builder Group — UPB Cochabamba",
-    description: "Construye el próximo Cochabamba, en código.",
+    description: "Construyendo el futuro tech de Cochabamba.",
     images: ["/og-image.png"],
   },
 };
