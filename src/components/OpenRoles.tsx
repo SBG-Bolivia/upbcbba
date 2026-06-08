@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Link from "next/link";
 import { gsap } from "@/lib/gsap";
-
-const WHATSAPP_URL = "https://chat.whatsapp.com/E3JGbxrbDYaICTwRpIN1Jz";
 
 // ─── Edit this list to update open positions ────────────────────────────────
 const ROLES = [
@@ -144,17 +143,15 @@ export default function OpenRoles() {
               ¿Te suena alguno?
             </p>
             <p className="text-sm text-ink-500 dark:text-ink-400">
-              Escribinos por WhatsApp y contanos qué te gustaría hacer.
+              Llená el formulario y dejanos tu CV. Te escribimos si encaja.
             </p>
           </div>
-          <a
-            href={WHATSAPP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/postulate"
             className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium bg-navy-700 text-white hover:bg-navy-800 transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]"
           >
             Postúlate · Únete al equipo →
-          </a>
+          </Link>
         </div>
       </div>
     </section>

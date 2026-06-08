@@ -4,6 +4,7 @@ import {
   GetCommand,
   PutCommand,
   QueryCommand,
+  ScanCommand,
   UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { ddb } from "./clients";
@@ -29,6 +30,12 @@ export async function putEvent(event: SbgEvent): Promise<void> {
   await ddb().send(new PutCommand({ TableName: T.events, Item: event }));
 }
 
+export async function listEvents(): Promise<SbgEvent[]> {
+  const out = await ddb().send(new ScanCommand({ TableName: T.events }));
+  const items = (out.Items as SbgEvent[]) ?? [];
+  return items.sort((a, b) => (a.date < b.date ? 1 : -1));
+}
+
 // ─── Participants ─────────────────────────────────────────────────────────────
 export async function putParticipant(p: Participant): Promise<void> {
   await ddb().send(new PutCommand({ TableName: T.participants, Item: p }));
@@ -43,9 +50,34 @@ export async function getParticipant(
   return (out.Item as Participant) ?? null;
 }
 
+export async function findParticipantByEmail(
+  email: string
+): Promise<Participant | null> {
+  const out = await ddb().send(
+    new QueryCommand({
+      TableName: T.participants,
+      IndexName: "email-index",
+      KeyConditionExpression: "email = :e",
+      ExpressionAttributeValues: { ":e": email },
+      Limit: 1,
+    })
+  );
+  return ((out.Items as Participant[])?.[0]) ?? null;
+}
+
 // ─── Attendance ───────────────────────────────────────────────────────────────
 export async function putAttendance(a: AttendanceRecord): Promise<void> {
   await ddb().send(new PutCommand({ TableName: T.attendance, Item: a }));
+}
+
+export async function getAttendance(
+  eventId: string,
+  participantId: string
+): Promise<AttendanceRecord | null> {
+  const out = await ddb().send(
+    new GetCommand({ TableName: T.attendance, Key: { eventId, participantId } })
+  );
+  return (out.Item as AttendanceRecord) ?? null;
 }
 
 export async function listAttendanceByEvent(

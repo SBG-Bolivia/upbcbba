@@ -23,8 +23,21 @@ export interface CertFields {
   certId: string;
 }
 
-const NAVY = rgb(0.024, 0.09, 0.365); // #06175D
+const NAVY = rgb(0.024, 0.09, 0.365);
 const INK = rgb(0.4, 0.4, 0.45);
+const DARK_ON_GREEN = rgb(0.05, 0.18, 0.12);
+const LIGHT_ON_DARK = rgb(0.95, 1.0, 0.98);
+const GREEN_PANEL = rgb(0.36, 0.95, 0.62);
+const DARK_PANEL = rgb(0.055, 0.125, 0.141);
+
+const TEMPLATE_SLOTS = {
+  workshopCenterX: 245,
+  workshopY: 318,
+  workshopSize: 22,
+  studentCenterX: 645,
+  studentY: 230,
+  studentSize: 26,
+} as const;
 
 export async function generateCertificatePdf(
   fields: CertFields
@@ -38,7 +51,6 @@ export async function generateCertificatePdf(
     pdf = await PDFDocument.load(await fetchTemplate());
     usedTemplate = true;
   } catch {
-    // No template uploaded yet — generate a minimal A4-landscape certificate.
     pdf = await PDFDocument.create();
     pdf.addPage([842, 595]);
   }
@@ -48,13 +60,65 @@ export async function generateCertificatePdf(
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
   const regular = await pdf.embedFont(StandardFonts.Helvetica);
 
-  const centerText = (text: string, y: number, size: number, color = NAVY) => {
+  const drawCentered = (
+    text: string,
+    cx: number,
+    y: number,
+    size: number,
+    color: ReturnType<typeof rgb>
+  ) => {
     const w = bold.widthOfTextAtSize(text, size);
-    page.drawText(text, { x: width / 2 - w / 2, y, size, font: bold, color });
+    page.drawText(text, { x: cx - w / 2, y, size, font: bold, color });
   };
 
-  if (!usedTemplate) {
-    centerText("CERTIFICADO DE PARTICIPACIÓN", height - 130, 22);
+  const drawWithCover = (
+    text: string,
+    cx: number,
+    y: number,
+    size: number,
+    textColor: ReturnType<typeof rgb>,
+    bgColor: ReturnType<typeof rgb>,
+    minWidth: number
+  ) => {
+    const tw = bold.widthOfTextAtSize(text, size);
+    const w = Math.max(tw, minWidth) + 24;
+    page.drawRectangle({
+      x: cx - w / 2,
+      y: y - size * 0.5,
+      width: w,
+      height: size * 1.65,
+      color: bgColor,
+    });
+    page.drawText(text, {
+      x: cx - tw / 2,
+      y,
+      size,
+      font: bold,
+      color: textColor,
+    });
+  };
+
+  if (usedTemplate) {
+    drawWithCover(
+      fields.eventName,
+      TEMPLATE_SLOTS.workshopCenterX,
+      TEMPLATE_SLOTS.workshopY,
+      TEMPLATE_SLOTS.workshopSize,
+      DARK_ON_GREEN,
+      GREEN_PANEL,
+      180
+    );
+    drawWithCover(
+      fields.participantName,
+      TEMPLATE_SLOTS.studentCenterX,
+      TEMPLATE_SLOTS.studentY,
+      TEMPLATE_SLOTS.studentSize,
+      LIGHT_ON_DARK,
+      DARK_PANEL,
+      220
+    );
+  } else {
+    drawCentered("CERTIFICADO DE PARTICIPACIÓN", width / 2, height - 130, 22, NAVY);
     page.drawText("AWS Student Builder Group · UPB Cochabamba", {
       x: 60,
       y: height - 160,
@@ -62,29 +126,32 @@ export async function generateCertificatePdf(
       font: regular,
       color: INK,
     });
-    centerText("Se otorga a", height / 2 + 70, 14, INK);
+    drawCentered("Se otorga a", width / 2, height / 2 + 70, 14, INK);
+    drawCentered(fields.participantName, width / 2, height / 2 + 20, 30, NAVY);
+    drawCentered(
+      `por su participación en ${fields.eventName}`,
+      width / 2,
+      height / 2 - 30,
+      14,
+      INK
+    );
+    drawCentered(fields.date, width / 2, height / 2 - 70, 12, INK);
   }
 
-  // Overlay the dynamic fields. Adjust Y positions to match your template.
-  centerText(fields.participantName, height / 2 + 20, 30);
-  centerText(`por su participación en ${fields.eventName}`, height / 2 - 30, 14, INK);
-  centerText(fields.date, height / 2 - 70, 12, INK);
-
-  // Verification QR (bottom-right) + URL (bottom-left).
   const qrImg = await pdf.embedPng(qrPng);
-  const qrSize = 72;
+  const qrSize = 64;
   page.drawImage(qrImg, {
-    x: width - qrSize - 40,
-    y: 40,
+    x: width - qrSize - 24,
+    y: 24,
     width: qrSize,
     height: qrSize,
   });
-  page.drawText(`Verificá este certificado: ${verifyUrl}`, {
-    x: 40,
-    y: 46,
-    size: 8,
+  page.drawText(verifyUrl, {
+    x: 24,
+    y: 28,
+    size: 7,
     font: regular,
-    color: INK,
+    color: usedTemplate ? LIGHT_ON_DARK : INK,
   });
 
   return pdf.save();
