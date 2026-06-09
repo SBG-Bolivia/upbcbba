@@ -8,48 +8,25 @@
  */
 
 import { APPLICATIONS_BUCKET, supabase } from "./client";
+import type {
+  ApplicationStatus,
+  Department,
+  JobApplication,
+  NewApplicationInput,
+} from "./applications-types";
 
-export type Department = "marketing" | "it" | "dev" | "eventos";
-export type ApplicationStatus =
-  | "pending"
-  | "contacted"
-  | "hired"
-  | "rejected";
-
-export const DEPARTMENTS: Department[] = ["marketing", "it", "dev", "eventos"];
-export const APPLICATION_STATUSES: ApplicationStatus[] = [
-  "pending",
-  "contacted",
-  "hired",
-  "rejected",
-];
-
-export const DEPARTMENT_LABELS: Record<Department, string> = {
-  marketing: "Marketing / Redes Sociales",
-  it: "IT Support",
-  dev: "Dev Team",
-  eventos: "Relaciones / Eventos",
-};
-
-export const STATUS_LABELS: Record<ApplicationStatus, string> = {
-  pending: "Pendiente",
-  contacted: "Contactado",
-  hired: "Aceptado",
-  rejected: "Rechazado",
-};
-
-export interface JobApplication {
-  id: string;
-  name: string;
-  email: string;
-  department: Department;
-  linkedinUrl: string | null;
-  cvStoragePath: string;
-  cvFileName: string;
-  status: ApplicationStatus;
-  notes: string | null;
-  submittedAt: string;
-}
+export {
+  APPLICATION_STATUSES,
+  DEPARTMENTS,
+  DEPARTMENT_LABELS,
+  STATUS_LABELS,
+} from "./applications-types";
+export type {
+  ApplicationStatus,
+  Department,
+  JobApplication,
+  NewApplicationInput,
+} from "./applications-types";
 
 interface ApplicationRow {
   id: string;
@@ -77,16 +54,6 @@ function fromRow(r: ApplicationRow): JobApplication {
     notes: r.notes,
     submittedAt: r.submitted_at,
   };
-}
-
-export interface NewApplicationInput {
-  id: string;
-  name: string;
-  email: string;
-  department: Department;
-  linkedinUrl: string | null;
-  cvStoragePath: string;
-  cvFileName: string;
 }
 
 export async function insertApplication(

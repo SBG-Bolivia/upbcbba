@@ -10,7 +10,7 @@ import {
   type ApplicationStatus,
   type Department,
   type JobApplication,
-} from "@/lib/supabase/applications";
+} from "@/lib/supabase/applications-types";
 
 interface Props {
   initial: JobApplication[];
