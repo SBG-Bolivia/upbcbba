@@ -12,16 +12,32 @@ let cached: SupabaseClient | null = null;
 
 export function supabase(): SupabaseClient {
   if (cached) return cached;
-  const url = (
-    process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL
-  )?.trim();
-  const key = (
-    process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_KEY
-  )?.trim();
+  const rawUrl = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const rawKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_KEY;
+  const url = rawUrl?.trim();
+  const key = rawKey?.trim();
   if (!url || !key) {
-    throw new Error(
-      "Supabase not configured — set SUPABASE_URL (or NEXT_PUBLIC_SUPABASE_URL) and SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_SERVICE_KEY)"
-    );
+    const diag = {
+      SUPABASE_URL: process.env.SUPABASE_URL === undefined
+        ? "undef"
+        : `len=${process.env.SUPABASE_URL.length}`,
+      NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL === undefined
+        ? "undef"
+        : `len=${process.env.NEXT_PUBLIC_SUPABASE_URL.length}`,
+      SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY === undefined
+        ? "undef"
+        : `len=${process.env.SUPABASE_SERVICE_ROLE_KEY.length}`,
+      SUPABASE_SERVICE_KEY: process.env.SUPABASE_SERVICE_KEY === undefined
+        ? "undef"
+        : `len=${process.env.SUPABASE_SERVICE_KEY.length}`,
+      hasUrl: Boolean(url),
+      hasKey: Boolean(key),
+      seenSupabaseKeys: Object.keys(process.env).filter((k) =>
+        k.includes("SUPABASE")
+      ),
+    };
+    throw new Error(`Supabase not configured — diag=${JSON.stringify(diag)}`);
   }
   cached = createClient(url, key, {
     auth: { persistSession: false, autoRefreshToken: false },
