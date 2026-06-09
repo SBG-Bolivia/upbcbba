@@ -7,7 +7,7 @@ applications:
             - npm ci --cache .npm --prefer-offline
         build:
           commands:
-            - env | grep -E '^(SUPABASE_|SBG_|ADMIN_PASSWORD)=' >> .env.production
+            - env | grep -E '^(SUPABASE_|NEXT_PUBLIC_SUPABASE_|NEXT_PUBLIC_BASE_URL|SBG_|ADMIN_PASSWORD)=' >> .env.production
             - npm run build
       artifacts:
         baseDirectory: .next
