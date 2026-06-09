@@ -63,8 +63,26 @@ export async function POST(req: Request) {
   try {
     storagePath = await uploadCv(id, bytes);
   } catch (e) {
+    const err = e as { name?: string; message?: string; statusCode?: string | number; status?: number };
     console.error("[applications] upload failed", e);
-    return bad("No pudimos guardar el CV. Intentá más tarde.", 500);
+    return NextResponse.json(
+      {
+        error: "No pudimos guardar el CV. Intentá más tarde.",
+        debug: {
+          name: err?.name ?? null,
+          message: err?.message ?? null,
+          statusCode: err?.statusCode ?? err?.status ?? null,
+          supabaseUrlHost: (() => {
+            const u = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+            try { return new URL(u).host; } catch { return u ? "invalid-url" : "missing"; }
+          })(),
+          serviceKeyPresent: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_KEY),
+          serviceKeyLen: (process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_KEY ?? "").length,
+          envSampleKeys: Object.keys(process.env).filter((k) => /^(SUPABASE|SBG|ADMIN|NEXT_PUBLIC)/.test(k)).sort(),
+        },
+      },
+      { status: 500 }
+    );
   }
 
   try {
