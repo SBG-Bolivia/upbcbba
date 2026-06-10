@@ -1,17 +1,9 @@
 "use client";
-/** @jsxRuntime classic */
-import React, { useEffect, useRef } from "react";
+
+import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 import TiltCardGSAP from "./TiltCardGSAP";
 import { Avatar, SocialLinks } from "./SocialIcons";
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [elemName: string]: any;
-    }
-  }
-}
 
 type Lead = {
   name: string;
@@ -31,25 +23,25 @@ const TEAM: Lead[] = [
     role: "Líder · Leader",
     initials: "GO",
     color: "#06175D",
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
+    github: "https://github.com/olartgabo",
+    linkedin: "linkedin.com/in/gabriel-olarte-medrano-741aa331a",
   },
   {
-    name: "Wara Yaretzy",
-    role: "Social Media Manager",
+    name: " Yaretzy Wara ",
+    role: "Marketing & Communications Lead · Líder de Marketing y Comunicaciones",
     initials: "WY",
     color: "#1ed4a2",
     dark: true,
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
+    github: "https://github.com/Wara06",
+    linkedin: "https://linkedin.com/in/yaretzymurillo",
   },
   {
-    name: "Bernardo Perez",
+    name: "Bernardo Del Aguila",
     role: "Líder Técnico · Technical Lead",
     initials: "BP",
     color: "#1a3aad",
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
+    github: "https://github.com/Ber112233",
+    linkedin: "https://www.linkedin.com/in/bernardo-perez-/",
   },
   {
     name: "Jose Cisternas",
@@ -57,17 +49,17 @@ const TEAM: Lead[] = [
     initials: "JC",
     color: "#0fa37c",
     dark: true,
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
+    github: "https://github.com/Jusepe123",
+    linkedin: "https://linkedin.com/in/jose-andres-cisternas-zurita-54405a3b5",
   },
   {
-    name: "Gabriel Prado",
+    name: "Gabriel Prado",  
     role: "Coordinador de Eventos · Event Coordinator",
     initials: "GP",
     color: "#ff8a3d",
     dark: true,
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
+    github: "https://github.com/gabrielpradove",
+    linkedin: "https://www.linkedin.com/in/gabriel-prado-velasquez-690138387?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
   },
 ];
 
