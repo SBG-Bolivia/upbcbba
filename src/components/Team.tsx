@@ -1,9 +1,17 @@
 "use client";
-
-import { useEffect, useRef } from "react";
+/** @jsxRuntime classic */
+import React, { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 import TiltCardGSAP from "./TiltCardGSAP";
 import { Avatar, SocialLinks } from "./SocialIcons";
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      [elemName: string]: any;
+    }
+  }
+}
 
 type Lead = {
   name: string;
