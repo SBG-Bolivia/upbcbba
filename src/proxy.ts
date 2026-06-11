@@ -3,7 +3,7 @@ import { ADMIN_COOKIE, verifyAdminCookie } from "@/lib/admin/auth";
 
 export const config = {
   matcher: ["/admin/:path*", "/api/admin/:path*"],
-};
+}; 
 
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
