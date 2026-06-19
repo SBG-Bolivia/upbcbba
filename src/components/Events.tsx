@@ -1,109 +1,115 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import { gsap } from "@/lib/gsap";
-import TiltCard from "./TiltCard";
-import TiltCardGSAP from "./TiltCardGSAP";
 
-const EVENTS = [
+type RealEvent = {
+  title: string;
+  date: string;
+  tag: string;
+  desc: string;
+  images: string[];
+};
+
+const EVENTS: RealEvent[] = [
   {
-    tag: "/ Demo Night",
-    date: "03 MAY 2026",
-    title: "Demo Night #07",
-    desc: "Once proyectos, dos horas, una sala. Trae tu laptop o trae solo curiosidad.",
-    location: "Bloque C · UPB Cbba",
-    time: "18:30",
-    color: "signal" as const,
-    featured: true,
+    title: "MeetUp de Lanzamiento AWS Student Builder Group Cochabamba",
+    date: "FEB 2026",
+    tag: "/ Lanzamiento",
+    desc: "Este evento marcó el lanzamiento oficial de AWS Student Builder Group Cochabamba. La actividad se realizó en los laboratorios de la Universidad Privada Boliviana (UPB) y reunió a estudiantes interesados en computación en la nube, desarrollo de software y tecnologías AWS. Durante la jornada se realizó una introducción al ecosistema AWS, presentando los conceptos fundamentales de computación en la nube y mostrando el potencial de las herramientas disponibles para estudiantes. Además, se desarrolló un taller práctico utilizando servicios fundamentales de AWS, incluyendo Amazon S3 y AWS Lambda, permitiendo a los participantes tener un primer contacto con la creación de soluciones serverless.",
+    images: [
+      "/events/meetup-launch/20260224_195945805.jpg",
+      "/events/meetup-launch/20260304_212823213.jpg",
+      "/events/meetup-launch/6-03-04_21-21-10-260.jpg",
+      "/events/meetup-launch/IMG_20260224_143900.jpg",
+      "/events/meetup-launch/IMG_20260224_143951.jpg",
+      "/events/meetup-launch/IMG_20260224_144321.jpg",
+      "/events/meetup-launch/IMG_20260224_144838.jpg",
+      "/events/meetup-launch/IMG_20260224_144848.jpg",
+      "/events/meetup-launch/IMG_20260224_144918(1).jpg",
+      "/events/meetup-launch/IMG_20260224_151214.jpg",
+    ],
   },
   {
-    tag: "/ Workshop",
-    date: "10 MAY 2026",
-    title: "AWS Lambda desde cero",
-    desc: "Aprende serverless con ejemplos reales. Trae laptop.",
-    location: "Lab Sistemas · UPB",
-    time: "17:00",
-    color: "navy" as const,
+    title: "Roadmap AWS para Estudiantes",
+    date: "MAR–ABR 2026",
+    tag: "/ Talleres",
+    desc: "Esta serie de talleres fue diseñada para introducir a los miembros de la comunidad al ecosistema AWS de una manera más estructurada. Los participantes exploraron los principales servicios utilizados en entornos reales y conocieron rutas de aprendizaje recomendadas para diferentes perfiles tecnológicos, incluyendo desarrollo, arquitectura cloud y data. El objetivo principal fue brindar una guía clara para iniciar una carrera en tecnologías cloud y comprender cómo construir proyectos utilizando servicios de AWS.",
+    images: [
+      "/events/roadmap/20260312_201323.jpg",
+      "/events/roadmap/20260312_213924.jpg",
+      "/events/roadmap/20260323_203631.jpg",
+      "/events/roadmap/20260409_203447.jpg",
+      "/events/roadmap/VideoCapture_20260424-232615.jpg",
+    ],
   },
   {
-    tag: "/ Hackathon",
-    date: "24–25 MAY 2026",
-    title: "BuildWeekend #03",
-    desc: "48 horas para llevar una idea a un demo funcional. Equipos de 2–4.",
-    location: "UPB Cochabamba",
-    time: "Todo el día",
-    color: "plaza" as const,
-  },
-  {
-    tag: "/ Talk",
-    date: "07 JUN 2026",
-    title: "Arquitectura en AWS para estudiantes",
-    desc: "De los 12 servicios que más se usan, cuáles son suficientes para el 90% de los proyectos.",
-    location: "Online · Zoom",
-    time: "19:00",
-    color: "navy" as const,
+    title: "Lanzamiento Student Community Day Cochabamba",
+    date: "JUN 2026",
+    tag: "/ Comunidad",
+    desc: "Durante este evento se realizó la presentación oficial del Student Community Day en Cochabamba. Los asistentes conocieron los objetivos de la iniciativa, las oportunidades de participación y el impacto que este tipo de actividades genera dentro del ecosistema tecnológico estudiantil. Como parte de la agenda se desarrolló un taller práctico de despliegue de aplicaciones utilizando AWS Amplify, mostrando cómo publicar aplicaciones modernas de forma rápida y escalable.",
+    images: [
+      "/events/lanzamiento-scd/20260608_195945.jpg",
+      "/events/lanzamiento-scd/20260610_010743198.jpg",
+      "/events/lanzamiento-scd/20260610_011249696.jpg",
+      "/events/lanzamiento-scd/20260610_012827403.jpg",
+      "/events/lanzamiento-scd/IMG-20260608-WA0008.jpg",
+      "/events/lanzamiento-scd/Photo Album 1 - 00000024.jpg",
+      "/events/lanzamiento-scd/Photo Album 1 - 00000037.jpg",
+      "/events/lanzamiento-scd/Photo Album 1 - 00000042.jpg",
+      "/events/lanzamiento-scd/Photo Album 1 - 00000057.jpg",
+      "/events/lanzamiento-scd/VideoCapture_20260610-011428.jpg",
+      "/events/lanzamiento-scd/VideoCapture_20260610-011511.jpg",
+      "/events/lanzamiento-scd/VideoCapture_20260610-012945.jpg",
+      "/events/lanzamiento-scd/VideoCapture_20260610-013223.jpg",
+      "/events/lanzamiento-scd/VideoCapture_20260610-013425.jpg",
+      "/events/lanzamiento-scd/VideoCapture_20260610-013444.jpg",
+    ],
   },
 ];
 
-const colorMap = {
-  signal: {
-    tag: "text-signal-700 dark:text-signal-500",
-    dot: "bg-signal-600",
-    border: "border-signal-600/30 dark:border-signal-700/30",
-    badge: "bg-signal-600/10 text-signal-700 dark:bg-signal-500/10 dark:text-signal-500",
-  },
-  navy: {
-    tag: "text-navy-500 dark:text-navy-300",
-    dot: "bg-navy-400",
-    border: "border-navy-400/20 dark:border-navy-600/30",
-    badge: "bg-navy-100 text-navy-600 dark:bg-navy-900/60 dark:text-navy-300",
-  },
-  plaza: {
-    tag: "text-plaza-600",
-    dot: "bg-plaza-500",
-    border: "border-plaza-500/30",
-    badge: "bg-plaza-500/10 text-plaza-600",
-  },
-};
+function GalleryTile({ src, alt }: { src: string; alt: string }) {
+  return (
+    <div className="relative aspect-[4/3] rounded-lg overflow-hidden border border-white/[0.08] group">
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        className="object-cover transition-transform duration-500 group-hover:scale-105"
+        sizes="(max-width: 768px) 50vw, 25vw"
+      />
+      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500" />
+    </div>
+  );
+}
 
 export default function Events() {
   const sectionRef = useRef<HTMLElement>(null);
-  const cardsRef = useRef<HTMLDivElement>(null);
-  const featuredRef = useRef<HTMLDivElement>(null);
+  const headRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
-        featuredRef.current,
-        { opacity: 0, y: 40 },
+        headRef.current,
+        { opacity: 0, y: 30 },
         {
-          opacity: 1,
-          y: 0,
-          duration: 0.9,
-          ease: "power3.out",
-          scrollTrigger: { trigger: featuredRef.current, start: "top 80%" },
+          opacity: 1, y: 0, duration: 0.9, ease: "power3.out",
+          scrollTrigger: { trigger: headRef.current, start: "top 82%" },
         }
       );
-
       gsap.fromTo(
-        cardsRef.current?.children ? Array.from(cardsRef.current.children) : [],
+        listRef.current?.children ? Array.from(listRef.current.children) : [],
         { opacity: 0, y: 32 },
         {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-          stagger: 0.1,
-          ease: "power3.out",
-          scrollTrigger: { trigger: cardsRef.current, start: "top 80%" },
+          opacity: 1, y: 0, duration: 0.7, stagger: 0.15, ease: "power3.out",
+          scrollTrigger: { trigger: listRef.current, start: "top 82%" },
         }
       );
     }, sectionRef);
-
     return () => ctx.revert();
   }, []);
-
-  const featured = EVENTS[0];
-  const rest = EVENTS.slice(1);
 
   return (
     <section
@@ -112,8 +118,7 @@ export default function Events() {
       className="py-24 bg-navy-900 dark:bg-ink-950"
     >
       <div className="max-w-[1240px] mx-auto px-6 md:px-8">
-        {/* Section header */}
-        <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-12 mb-14">
+        <div ref={headRef} className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-12 mb-14">
           <div>
             <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/40">
               <span className="text-signal-600">●</span> 02 / Eventos
@@ -124,117 +129,41 @@ export default function Events() {
               className="text-[clamp(28px,4vw,44px)] font-semibold text-white mb-4 leading-[1.05]"
               style={{ letterSpacing: "-0.025em" }}
             >
-              Próximas sesiones.
+              Nuestros Eventos.
             </h2>
             <p className="text-[16px] text-white/50 leading-relaxed max-w-xl">
-              Demo nights, workshops, hackathons. Todo gratis, todo en UPB Cbba
-              — o en Zoom cuando no hay otra.
+              Actividades reales organizadas por AWS Student Builder Group
+              Cochabamba. Talleres, meetups y lanzamientos que ya son parte de
+              la comunidad.
             </p>
           </div>
         </div>
 
-        {/* Featured event — outer div holds GSAP ref, inner TiltCard handles 3D */}
-        <div ref={featuredRef} className="mb-6">
-          <TiltCard
-            intensity={4}
-            shineColor="rgba(92,242,200,0.07)"
-            className="relative rounded-2xl overflow-hidden border border-white/[0.08]"
-            style={{ background: "#01051f" }}
-          >
-            {/* Grid bg */}
+        <div ref={listRef} className="flex flex-col gap-16">
+          {EVENTS.map((ev) => (
             <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                backgroundImage:
-                  "linear-gradient(to right, rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,.03) 1px, transparent 1px)",
-                backgroundSize: "32px 32px",
-              }}
-            />
-            {/* Glow */}
-            <div
-              className="absolute top-0 right-0 w-96 h-48 pointer-events-none"
-              style={{
-                background:
-                  "radial-gradient(ellipse at top right, rgba(92,242,200,0.12), transparent 70%)",
-              }}
-            />
-
-            <div className="relative p-8 md:p-10">
-              <div className="flex justify-between items-start mb-8">
+              key={ev.title}
+              className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-8 pb-16 border-b border-white/[0.06] last:border-0 last:pb-0"
+            >
+              <div>
                 <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-signal-500">
-                  {featured.tag} · {featured.date}
+                  {ev.tag} · {ev.date}
                 </span>
-                <span className="font-mono text-[11px] text-white/30 uppercase tracking-[0.1em]">
-                  cocha · 1840 m.s.n.m.
-                </span>
+                <h3 className="text-[20px] font-semibold text-white mt-3 mb-3 leading-snug">
+                  {ev.title}
+                </h3>
+                <p className="text-[14px] text-white/55 leading-relaxed">
+                  {ev.desc}
+                </p>
               </div>
-              <h3
-                className="text-[clamp(24px,3.5vw,38px)] font-semibold text-white leading-[1.05] max-w-2xl mb-10"
-                style={{ letterSpacing: "-0.025em" }}
-              >
-                {featured.title} — once proyectos, dos horas, una sala.
-              </h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 border-t border-white/[0.1] pt-6">
-                {[
-                  { label: "Miembros",  value: "148",       sub: "activos" },
-                  { label: "Proyectos", value: "11",        sub: "esta noche" },
-                  { label: "Ubicación", value: "Bloque C",  sub: featured.location.split("·")[0].trim() },
-                  { label: "Hora",      value: featured.time, sub: featured.date },
-                ].map((s) => (
-                  <div key={s.label}>
-                    <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/40 mb-1.5">
-                      {s.label}
-                    </dt>
-                    <dd className="text-[26px] font-semibold text-white leading-none m-0" style={{ letterSpacing: "-0.02em" }}>
-                      {s.value}
-                      <em className="not-italic font-mono text-[12px] font-normal text-white/40 ml-1.5">
-                        {s.sub}
-                      </em>
-                    </dd>
-                  </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                {ev.images.map((src) => (
+                  <GalleryTile key={src} src={src} alt={ev.title} />
                 ))}
               </div>
             </div>
-          </TiltCard>
-        </div>
-
-        {/* Event cards grid */}
-        <div
-          ref={cardsRef}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4"
-        >
-          {rest.map((ev) => {
-            const c = colorMap[ev.color];
-            return (
-              <TiltCardGSAP
-                key={ev.title}
-                intensity={10}
-                shineColor="rgba(92,242,200,0.12)"
-                className={`rounded-xl border bg-white/[0.03] hover:bg-white/[0.06] transition-colors p-5 flex flex-col gap-3 ${c.border}`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className={`font-mono text-[10px] uppercase tracking-[0.14em] ${c.tag}`}>
-                    {ev.tag}
-                  </span>
-                  <span
-                    className={`font-mono text-[10px] px-2 py-0.5 rounded-full uppercase tracking-[0.08em] ${c.badge}`}
-                  >
-                    {ev.date}
-                  </span>
-                </div>
-                <h4 className="text-[15px] font-semibold text-white leading-snug">
-                  {ev.title}
-                </h4>
-                <p className="text-[13px] text-white/50 leading-relaxed flex-1">
-                  {ev.desc}
-                </p>
-                <div className="flex items-center justify-between pt-2 border-t border-white/[0.08] font-mono text-[10px] uppercase tracking-[0.1em] text-white/40">
-                  <span>{ev.location}</span>
-                  <span>{ev.time}</span>
-                </div>
-              </TiltCardGSAP>
-            );
-          })}
+          ))}
         </div>
       </div>
     </section>

@@ -6,7 +6,7 @@ import Perks         from "@/components/Perks";
 import Timeline      from "@/components/Timeline";
 import Testimonials  from "@/components/Testimonials";
 import Events        from "@/components/Events";
-import PastEvents    from "@/components/PastEvents";
+import Comunidades   from "@/components/Comunidades";
 import Members       from "@/components/Members";
 import Team          from "@/components/Team";
 import OpenRoles     from "@/components/OpenRoles";
@@ -41,7 +41,7 @@ export default function Home() {
           <Timeline />
           <Testimonials />
           <Events />
-          <PastEvents />
+          <Comunidades />
           <Members />
           <Team />
           <OpenRoles />

@@ -15,8 +15,8 @@ import {
 
 const NAV_ITEMS = [
   { label: "Nosotros",  href: "#nosotros",  hint: "Quiénes somos" },
-  { label: "Eventos",   href: "#eventos",   hint: "Próximas sesiones" },
-  { label: "Galería",   href: "#pasados",   hint: "Eventos pasados" },
+  { label: "Eventos",   href: "#eventos",   hint: "Actividades realizadas" },
+  { label: "Comunidades", href: "#comunidades", hint: "Colaboración comunitaria" },
   { label: "Miembros",  href: "#miembros",  hint: "Quiénes están construyendo" },
   { label: "Equipo",    href: "#equipo",    hint: "Quiénes lideran el grupo" },
   { label: "Roles",     href: "#roles",     hint: "Posiciones abiertas" },
