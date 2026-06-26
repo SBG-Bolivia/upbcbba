@@ -8,11 +8,10 @@ const navLinks = [
   { label: "Nosotros",  href: "#nosotros" },
   { label: "Eventos",   href: "#eventos" },
   { label: "Comunidades", href: "#comunidades" },
-  { label: "Equipo",    href: "#equipo" },
   { label: "Proyectos", href: "#proyectos" },
 ];
 
-const SECTION_IDS = ["nosotros", "eventos", "comunidades", "equipo", "proyectos"];
+const SECTION_IDS = ["nosotros", "eventos", "comunidades", "proyectos"];
 
 export default function Navbar() {
   const [scrolled,       setScrolled]       = useState(false);

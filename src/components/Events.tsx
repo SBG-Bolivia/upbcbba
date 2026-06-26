@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import Image from "next/image";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { gsap } from "@/lib/gsap";
+import GalleryCarousel from "./GalleryCarousel";
 
 type RealEvent = {
   title: string;
@@ -69,17 +69,116 @@ const EVENTS: RealEvent[] = [
   },
 ];
 
-function GalleryTile({ src, alt }: { src: string; alt: string }) {
+function splitFirstParagraph(text: string): [string, string] {
+  const idx = text.indexOf(". ");
+  if (idx === -1) return [text, ""];
+  return [text.slice(0, idx + 1), text.slice(idx + 2)];
+}
+
+const NODE_COLORS = [
+  "bg-signal-600 border-signal-300 dark:border-signal-700",
+  "bg-navy-700 border-navy-300 dark:border-navy-600",
+  "bg-plaza-500 border-plaza-500/40",
+];
+
+function TimelineItem({
+  ev,
+  index,
+}: {
+  ev: RealEvent;
+  index: number;
+}) {
+  const [expanded, setExpanded] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const descRef = useRef<HTMLDivElement>(null);
+
+  const [firstP, rest] = splitFirstParagraph(ev.desc);
+  const isLeft = index % 2 === 0;
+  const nodeColor = NODE_COLORS[index % NODE_COLORS.length];
+
+  const toggleDesc = useCallback(() => {
+    if (!descRef.current) return;
+    if (!expanded) {
+      gsap.fromTo(
+        descRef.current,
+        { height: 0, opacity: 0 },
+        {
+          height: "auto", opacity: 1, duration: 0.4, ease: "power2.out",
+          onComplete: () => setExpanded(true),
+        }
+      );
+    } else {
+      gsap.to(descRef.current, {
+        height: 0, opacity: 0, duration: 0.3, ease: "power2.in",
+        onComplete: () => setExpanded(false),
+      });
+    }
+  }, [expanded]);
+
+  const carouselImages = ev.images;
+
   return (
-    <div className="relative aspect-[4/3] rounded-lg overflow-hidden border border-white/[0.08] group">
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        className="object-cover transition-transform duration-500 group-hover:scale-105"
-        sizes="(max-width: 768px) 50vw, 25vw"
+    <div
+      ref={cardRef}
+      className={`relative flex items-start gap-6 md:gap-10 pb-16 md:pb-20 ${
+        isLeft ? "md:flex-row" : "md:flex-row-reverse"
+      } flex-row`}
+    >
+      <div className="hidden md:block md:w-1/2 shrink-0" />
+
+      <div
+        className={`absolute left-[11px] md:left-1/2 top-2 w-[19px] h-[19px] rounded-full border-4 border-navy-900 dark:border-ink-950 md:-translate-x-1/2 shrink-0 z-10 ${nodeColor} ring-2 ring-signal-600/20 ring-offset-[3px] ring-offset-navy-900`}
       />
-      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500" />
+
+      <div
+        className={`ml-10 md:ml-0 md:w-1/2 ${isLeft ? "md:pr-10" : "md:pl-10"}`}
+      >
+          <div className="bg-white/[0.03] border border-white/[0.07] rounded-xl p-5 md:p-6 hover:border-white/[0.14] transition-colors flex flex-row gap-4 md:gap-6">
+          <div className="w-1/2">
+            <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+              <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/35">
+                {ev.date}
+              </span>
+              <span className="font-mono text-[9px] uppercase tracking-[0.1em] px-2 py-0.5 rounded-full bg-signal-600/10 text-signal-500">
+                {ev.tag}
+              </span>
+            </div>
+
+            <h3 className="text-[17px] md:text-[19px] font-semibold text-white mb-3 leading-snug">
+              {ev.title}
+            </h3>
+
+            <p className="text-[13px] md:text-[14px] text-white/55 leading-relaxed">
+              {firstP}
+            </p>
+
+            {rest && (
+              <div
+                ref={descRef}
+                className="overflow-hidden"
+                style={{ height: 0, opacity: 0 }}
+              >
+                <p className="text-[13px] md:text-[14px] text-white/55 leading-relaxed mt-2">
+                  {rest}
+                </p>
+              </div>
+            )}
+
+            {rest && (
+              <button
+                onClick={toggleDesc}
+                className="mt-2 font-mono text-[10px] uppercase tracking-[0.1em] text-signal-500 hover:text-signal-400 transition-colors"
+              >
+                {expanded ? "Mostrar menos" : "Leer más"}
+              </button>
+            )}
+          </div>
+
+          <div className="w-1/2">
+            <GalleryCarousel images={carouselImages} title={ev.title} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -87,7 +186,7 @@ function GalleryTile({ src, alt }: { src: string; alt: string }) {
 export default function Events() {
   const sectionRef = useRef<HTMLElement>(null);
   const headRef = useRef<HTMLDivElement>(null);
-  const listRef = useRef<HTMLDivElement>(null);
+  const itemsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -99,14 +198,21 @@ export default function Events() {
           scrollTrigger: { trigger: headRef.current, start: "top 82%" },
         }
       );
-      gsap.fromTo(
-        listRef.current?.children ? Array.from(listRef.current.children) : [],
-        { opacity: 0, y: 32 },
-        {
-          opacity: 1, y: 0, duration: 0.7, stagger: 0.15, ease: "power3.out",
-          scrollTrigger: { trigger: listRef.current, start: "top 82%" },
-        }
-      );
+
+      if (itemsRef.current) {
+        const children = Array.from(itemsRef.current.children);
+        children.forEach((el, i) => {
+          const isLeft = i % 2 === 0;
+          gsap.fromTo(
+            el,
+            { opacity: 0, x: isLeft ? -40 : 40 },
+            {
+              opacity: 1, x: 0, duration: 0.7, ease: "power3.out",
+              scrollTrigger: { trigger: el, start: "top 84%" },
+            }
+          );
+        });
+      }
     }, sectionRef);
     return () => ctx.revert();
   }, []);
@@ -139,31 +245,14 @@ export default function Events() {
           </div>
         </div>
 
-        <div ref={listRef} className="flex flex-col gap-16">
-          {EVENTS.map((ev) => (
-            <div
-              key={ev.title}
-              className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-8 pb-16 border-b border-white/[0.06] last:border-0 last:pb-0"
-            >
-              <div>
-                <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-signal-500">
-                  {ev.tag} · {ev.date}
-                </span>
-                <h3 className="text-[20px] font-semibold text-white mt-3 mb-3 leading-snug">
-                  {ev.title}
-                </h3>
-                <p className="text-[14px] text-white/55 leading-relaxed">
-                  {ev.desc}
-                </p>
-              </div>
+        <div className="relative">
+          <div className="absolute left-[11px] md:left-1/2 top-0 bottom-0 w-px bg-white/[0.08] md:-translate-x-px" />
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
-                {ev.images.map((src) => (
-                  <GalleryTile key={src} src={src} alt={ev.title} />
-                ))}
-              </div>
-            </div>
-          ))}
+          <div ref={itemsRef} className="flex flex-col">
+            {EVENTS.map((ev, i) => (
+              <TimelineItem key={ev.title} ev={ev} index={i} />
+            ))}
+          </div>
         </div>
       </div>
     </section>
