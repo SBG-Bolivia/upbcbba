@@ -4,11 +4,9 @@ import TickerStrip   from "@/components/TickerStrip";
 import About         from "@/components/About";
 import Perks         from "@/components/Perks";
 import Timeline      from "@/components/Timeline";
-import Testimonials  from "@/components/Testimonials";
 import Events        from "@/components/Events";
-import PastEvents    from "@/components/PastEvents";
+import Comunidades   from "@/components/Comunidades";
 import Members       from "@/components/Members";
-import Team          from "@/components/Team";
 import OpenRoles     from "@/components/OpenRoles";
 import Projects      from "@/components/Projects";
 import JoinForm      from "@/components/JoinForm";
@@ -39,11 +37,9 @@ export default function Home() {
           <About />
           <Perks />
           <Timeline />
-          <Testimonials />
           <Events />
-          <PastEvents />
+          <Comunidades />
           <Members />
-          <Team />
           <OpenRoles />
           <Projects />
           <JoinForm />

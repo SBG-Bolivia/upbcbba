@@ -42,8 +42,8 @@ const MILESTONES = [
   },
   {
     date: "HOY",
-    title: "148 builders activos",
-    desc: "23 proyectos enviados, 9 carreras, Demo Night #07 en camino. Y esto recién empieza.",
+    title: "400+ builders activos",
+    desc: "23 proyectos enviados, 9 carreras representadas. Y esto recién empieza.",
     tag: "Activo",
     color: "signal",
     current: true,
@@ -105,7 +105,7 @@ export default function Timeline() {
               className="text-[clamp(28px,4vw,44px)] font-semibold text-white mb-4 leading-[1.05]"
               style={{ letterSpacing: "-0.025em" }}
             >
-              <ScrambleText text="De 8 a 148, en un año." />
+              <ScrambleText text="De 5 a 400+, en un año." />
             </h2>
             <p className="text-[16px] text-white/50 leading-relaxed max-w-xl">
               No fue de golpe. Fue demo a demo, proyecto a proyecto.

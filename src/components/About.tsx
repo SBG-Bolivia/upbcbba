@@ -22,7 +22,7 @@ const PILLARS = [
 ];
 
 const STATS = [
-  { value: 148, label: "Miembros activos", suffix: "" },
+  { value: 400, label: "Miembros activos", suffix: "+" },
   { value: 23, label: "Proyectos enviados", suffix: "'25–'26" },
 ];
 

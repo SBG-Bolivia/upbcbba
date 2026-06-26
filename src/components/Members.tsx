@@ -157,7 +157,7 @@ export default function Members() {
               Quiénes están construyendo.
             </h2>
             <p className="text-[16px] text-white/50 leading-relaxed max-w-xl">
-              148 miembros activos en 9 carreras. Conectate con la comunidad.
+              400+ miembros activos en 9 carreras. Conectate con la comunidad.
             </p>
           </div>
         </div>
@@ -198,14 +198,14 @@ export default function Members() {
             </TiltCardGSAP>
           ))}
 
-          {/* +136 card */}
+          {/* +288 card */}
           <TiltCardGSAP
             intensity={9}
             shineColor="rgba(92,242,200,0.05)"
             className="flex flex-col items-center justify-center text-center gap-3 p-6 rounded-xl border border-white/[0.05] bg-white/[0.01] min-h-[180px]"
           >
             <div className="w-16 h-16 rounded-full border-2 border-dashed border-white/[0.15] flex items-center justify-center font-semibold text-white/30 text-sm">
-              +136
+              +288
             </div>
             <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-white/25">
               Más builders
